@@ -295,7 +295,7 @@ trait ElasticquentTrait
      */
     public function addToIndex()
     {
-        if (!$this->exists) {
+        if (isset($this->exists) && !$this->exists) {
             throw new Exception('Document does not exist.');
         }
 
