@@ -2,6 +2,7 @@
 
 namespace Elasticquent;
 
+use Dream\Models\BaseModel;
 use Exception;
 use ReflectionMethod;
 use Illuminate\Database\Eloquent\Model;
@@ -656,23 +657,26 @@ trait ElasticquentTrait
     /**
      * Create a new model instance that is existing recursive.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  $model
      * @param  array  $attributes
      * @param  \Illuminate\Database\Eloquent\Relations\Relation  $parentRelation
      * @return static
      */
-    public static function newFromBuilderRecursive(Model $model, array $attributes = [], Relation $parentRelation = null)
-    {
-        $instance = $model->newInstance([], $exists = true);
+    public static function newFromBuilderRecursive($model, array $attributes = [], Relation $parentRelation = null) {
+      if($model instanceof BaseModel) {
+        $model->setFromArray($attributes);
+        return $model;
+      }
+      $instance = $model->newInstance([], $exists = true);
 
-        $instance->setRawAttributes((array)$attributes, $sync = true);
+      $instance->setRawAttributes((array)$attributes, $sync = true);
 
-        // Load relations recursive
-        static::loadRelationsAttributesRecursive($instance);
-        // Load pivot
-        static::loadPivotAttribute($instance, $parentRelation);
+      // Load relations recursive
+      static::loadRelationsAttributesRecursive($instance);
+      // Load pivot
+      static::loadPivotAttribute($instance, $parentRelation);
 
-        return $instance;
+      return $instance;
     }
 
     /**
