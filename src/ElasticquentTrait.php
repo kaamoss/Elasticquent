@@ -664,8 +664,9 @@ trait ElasticquentTrait
      */
     public static function newFromBuilderRecursive($model, array $attributes = [], Relation $parentRelation = null) {
       if($model instanceof BaseModel) {
-        $model->setFromArray($attributes);
-        return $model;
+        $newModel = clone $model;
+        $newModel->setFromArray($attributes);
+        return $newModel;
       }
       $instance = $model->newInstance([], $exists = true);
 
