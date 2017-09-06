@@ -539,6 +539,7 @@ trait ElasticquentTrait
         if (!is_null($mappingProperties)) {
             $index['body']['mappings'][$instance->getTypeName()] = [
                 '_source' => array('enabled' => true),
+                '_all' => array('enabled' => true, 'store'=>true),
                 'properties' => $mappingProperties,
             ];
         }
